@@ -1,6 +1,6 @@
 // To do:
 // addSong user interface to create Song object with artist and title, and most importantly url
-// 
+// need to be able to choose song
 
 var initialSongs = [
 	new Song("audio-files/meshuggah-clockworks.mp3", "Clockworks", "Meshuggah"),
@@ -21,14 +21,14 @@ function Jukebox(songArray) {
 	var jukeboxObj = this;
 	var prevVol = 0.5;
 		
-	player = document.getElementById('audio-player');
-	playBtn = document.getElementsByClassName('play-btn')[0];
-	pauseBtn = document.getElementsByClassName('pause-btn')[0];
-	stopBtn = document.getElementsByClassName('stop-btn')[0];
-	volUpBtn = document.getElementsByClassName('vol-up-btn')[0];
-	volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
-	muteBtn = document.getElementsByClassName('mute-btn')[0];
-	songList = document.getElementsByClassName('song-list')[0];
+	var player = document.getElementById('audio-player');
+	var playBtn = document.getElementsByClassName('play-btn')[0];
+	var pauseBtn = document.getElementsByClassName('pause-btn')[0];
+	var stopBtn = document.getElementsByClassName('stop-btn')[0];
+	var volUpBtn = document.getElementsByClassName('vol-up-btn')[0];
+	var volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
+	var muteBtn = document.getElementsByClassName('mute-btn')[0];
+	var songList = document.getElementsByClassName('song-list')[0];
 
 	this.pause = function() {
 		player.pause();
@@ -51,28 +51,30 @@ function Jukebox(songArray) {
 		}		
 	}
 
-	unmute = function() {
+	var unmute = function() {
 		player.volume = prevVol;		
 		muteBtn.innerHTML = "Mute";
 	}
 
-	mute = function() {
+	var mute = function() {
 		prevVol = player.volume;
 		player.volume = 0;
 		muteBtn.innerHTML = "Unmute";	
 	}
 
 	this.volumeUp = function() {
-		if (player.volume > 0.95) {
+		if (player.volume >= 0.95) {
 			player.volume = 1;
 		} else {
 			player.volume += 0.05;		
 		}
+		muteBtn.innerHTML = "Mute";
 	}
 
 	this.volumeDown = function() {
-		if (player.volume < 0.05) {
+		if (player.volume <= 0.05) {
 			player.volume = 0;
+			muteBtn.innerHTML = "Unmute"
 		} else {
 			player.volume -= 0.05;
 		}
@@ -84,14 +86,24 @@ function Jukebox(songArray) {
 		}
 		this.songs.push(song);
 		listSongs();
+		addSongListEvents();
 	}
 
 	this.newSongObj = function(songUrl, title, artist) {
-
+		// Code goes here...
 		this.addSong();
 	}
 
-	listSongs = function() {
+	var addSongListEvents = function() {
+		var songListItems = document.getElementsByClassName("song-list__item");
+		for (let k = 0; k < songListItems.length; k++) {
+			songListItems[k].addEventListener("click", function() {
+				pickSong(jukeboxObj.songs[k]);
+			});
+		}
+	}
+
+	var listSongs = function() {
 		songList.innerHTML = "";
 		for (var k = 0; k < jukeboxObj.songs.length; k++) {
 			var song = jukeboxObj.songs[k];
@@ -101,23 +113,30 @@ function Jukebox(songArray) {
 		}
 	}
 
-	loadSong = function(song) {
+	var loadSong = function(song) {
 		if (typeof song !== "object") {
 			return;
 		} else {
 			player.src = song.url;		
 		}
 	}
+
+	var pickSong = function(song) {
+		player.src = song.url;
+		this.currentlyPlaying = song;
+		console.log(this.currentlyPlaying);
+	}
 	
 	this.songs = songArray;
 	if (typeof this.songs !== "object") {
 		this.songs = [];
 	}
-	console.log(this.songs);
+	// console.log(this.songs);
 
 	this.currentlyPlaying = this.songs[0];
 	loadSong(this.currentlyPlaying);
 	listSongs();
+	addSongListEvents();
 
 	playBtn.addEventListener("click", this.play);	
 	pauseBtn.addEventListener("click", this.pause);
