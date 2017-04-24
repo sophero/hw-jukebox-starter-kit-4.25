@@ -9,3 +9,7 @@
 .song-list__item:hover {
 	cursor: pointer;
 }
+
+.add-track-modal__container {
+	display: none;
+}
