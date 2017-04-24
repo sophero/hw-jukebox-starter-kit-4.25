@@ -1,5 +1,5 @@
 // To do:
-// addSong user interface to create Song object with artist and title
+// addSong user interface to create Song object with artist and title, and most importantly url
 // 
 
 var initialSongs = [
@@ -24,6 +24,7 @@ function Jukebox(songArray) {
 	player = document.getElementById('audio-player');
 	playBtn = document.getElementsByClassName('play-btn')[0];
 	pauseBtn = document.getElementsByClassName('pause-btn')[0];
+	stopBtn = document.getElementsByClassName('stop-btn')[0];
 	volUpBtn = document.getElementsByClassName('vol-up-btn')[0];
 	volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
 	muteBtn = document.getElementsByClassName('mute-btn')[0];
@@ -35,6 +36,11 @@ function Jukebox(songArray) {
 
 	this.play = function() {
 		player.play();
+	}
+
+	this.stop = function() {
+		player.pause();
+		player.currentTime = 0;
 	}
 
 	this.muteUnmute = function() {
@@ -72,12 +78,21 @@ function Jukebox(songArray) {
 		}
 	}
 
-	this.addSong = function(songUrl) {
-		this.songs.push(new Song(songUrl));
+	this.addSong = function(song) {
+		if (typeof song !== "object") {
+			return;
+		}
+		this.songs.push(song);
 		listSongs();
 	}
 
+	this.newSongObj = function(songUrl, title, artist) {
+
+		this.addSong();
+	}
+
 	listSongs = function() {
+		songList.innerHTML = "";
 		for (var k = 0; k < jukeboxObj.songs.length; k++) {
 			var song = jukeboxObj.songs[k];
 			var newLi = '<li class="song-list__item">';
@@ -106,6 +121,7 @@ function Jukebox(songArray) {
 
 	playBtn.addEventListener("click", this.play);	
 	pauseBtn.addEventListener("click", this.pause);
+	stopBtn.addEventListener("click", this.stop);
 	muteBtn.addEventListener("click", this.muteUnmute);
 	volUpBtn.addEventListener("click", this.volumeUp);
 	volDownBtn.addEventListener("click", this.volumeDown);
