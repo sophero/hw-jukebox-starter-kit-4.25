@@ -1,10 +1,4 @@
-var player = document.getElementById('audio-player');
-var playBtn = document.getElementsByClassName('play-btn')[0];
-var songList = document.getElementsByClassName('song-list')[0];
 
-playBtn.addEventListener("click", function() {
-	player.play();
-});
 
 var initialSongs = [
 	new Song("Clockworks", "Meshuggah", "audio-files/meshuggah-clockworks.mp3"),
@@ -12,7 +6,7 @@ var initialSongs = [
 	new Song("Into Decay", "Meshuggah", "audio-files/meshuggah-into-decay.mp3")
 	];
 
-console.log(initialSongs);
+var jukebox = new Jukebox(initialSongs);
 
 function Song(title, artist, url) {
 	this.title = title;
@@ -21,12 +15,24 @@ function Song(title, artist, url) {
 }
 
 function Jukebox(songArray) {
+
+	var jukeboxObj = this;
+		
+	var player = document.getElementById('audio-player');
+	var playBtn = document.getElementsByClassName('play-btn')[0];
+	var songList = document.getElementsByClassName('song-list')[0];
+
+
 	this.songs = songArray;
 	if (typeof this.songs !== "object") {
 		this.songs = [];
 	}
 
 	this.currentlyPlaying;
+
+	this.play = function() {
+		player.play();
+	}
 
 	this.addSong = function(songUrl) {
 		this.songs.push();
@@ -36,4 +42,6 @@ function Jukebox(songArray) {
 	listSongs = function() {
 
 	}
+	playBtn.addEventListener("click", this.play);	
+
 }
