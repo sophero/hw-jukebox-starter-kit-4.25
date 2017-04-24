@@ -5,3 +5,7 @@
 .ctrl-btns:hover {
 	cursor: pointer;
 }
+
+.song-list__item:hover {
+	cursor: pointer;
+}

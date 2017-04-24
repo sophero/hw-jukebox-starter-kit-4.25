@@ -1,6 +1,7 @@
 // To do:
 // addSong user interface to create Song object with artist and title, and most importantly url
-// need to be able to choose song
+// random song
+// next track, previous track
 
 var initialSongs = [
 	new Song("audio-files/meshuggah-clockworks.mp3", "Clockworks", "Meshuggah"),
@@ -45,7 +46,7 @@ function Jukebox(songArray) {
 
 	this.muteUnmute = function() {
 		if (player.volume === 0) {
-			 unmute();
+			unmute();
 		} else {
 			mute();
 		}		
@@ -74,7 +75,7 @@ function Jukebox(songArray) {
 	this.volumeDown = function() {
 		if (player.volume <= 0.05) {
 			player.volume = 0;
-			muteBtn.innerHTML = "Unmute"
+			muteBtn.innerHTML = "Unmute";
 		} else {
 			player.volume -= 0.05;
 		}
@@ -98,7 +99,7 @@ function Jukebox(songArray) {
 		var songListItems = document.getElementsByClassName("song-list__item");
 		for (let k = 0; k < songListItems.length; k++) {
 			songListItems[k].addEventListener("click", function() {
-				pickSong(jukeboxObj.songs[k]);
+				pickSong(k);
 			});
 		}
 	}
@@ -121,20 +122,20 @@ function Jukebox(songArray) {
 		}
 	}
 
-	var pickSong = function(song) {
+	var pickSong = function(songIndex) {
+		var song = jukeboxObj.songs[songIndex]
 		player.src = song.url;
-		this.currentlyPlaying = song;
-		console.log(this.currentlyPlaying);
+		jukeboxObj.play();
+		jukeboxObj.currentSongIndex = songIndex;
 	}
 	
 	this.songs = songArray;
 	if (typeof this.songs !== "object") {
 		this.songs = [];
 	}
-	// console.log(this.songs);
 
-	this.currentlyPlaying = this.songs[0];
-	loadSong(this.currentlyPlaying);
+	this.currentSongIndex = 0;
+	loadSong(this.songs[this.currentSongIndex]);
 	listSongs();
 	addSongListEvents();
 
