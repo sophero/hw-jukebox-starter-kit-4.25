@@ -1,14 +1,10 @@
 // To do:
 // random song
-// next track, previous track
 // add currently playing info eg. volume, time through track..
 // add eventlistener on spacebar to play/pause!
 // time through track
 // need separate method for setting currentSongIndex
 // make separate method for clearing track new track input, add clear form button
-// loadSong should be called by pickSong. loadSong should be the last interface to call this.play()
-	// but pass it the desired song index, not object. smaller messages!
-
 
 var initialSongs = [
 	new Song("audio-files/meshuggah-clockworks.mp3", "Clockworks", "Meshuggah"),
@@ -17,7 +13,6 @@ var initialSongs = [
 	];
 
 var jukebox = new Jukebox(initialSongs);
-
 
 function Song(url, title, artist) {
 	this.url = url;
