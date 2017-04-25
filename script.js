@@ -1,9 +1,6 @@
 // To do:
 // add currently playing info eg. volume, time through track..
 // add eventlistener on spacebar to play/pause!
-// time through track
-// need separate method for setting currentSongIndex
-// make separate method for clearing track new track input, add clear form button
 
 var initialSongs = [
 	new Song("audio-files/meshuggah-clockworks.mp3", "Clockworks", "Meshuggah"),
@@ -21,13 +18,14 @@ function Song(url, title, artist) {
 
 function Jukebox(songArray) {
 	
+	var jukeboxObj = this;
 	var currentSongIndex = 0;
+	var	prevVol = 0.5;
+
 	this.songs = songArray;
 	if (typeof this.songs !== "object") {
 		this.songs = [];
 	}
-	var jukeboxObj = this;
-	this.prevVol = 0.5;
 	this.play = play;
 	this.pause = pause;
 	this.stop = stop;
@@ -39,7 +37,9 @@ function Jukebox(songArray) {
 
 	var player = document.getElementById('audio-player');
 	var songList = document.getElementsByClassName('song-list')[0];
-	
+	var nowPlayingTitle = document.getElementsByClassName('now-playing__title')[0];
+	var nowPlayingArtist = document.getElementsByClassName('now-playing__artist')[0];
+
 	var playBtn = document.getElementsByClassName('play-btn')[0];
 	var pauseBtn = document.getElementsByClassName('pause-btn')[0];
 	var stopBtn = document.getElementsByClassName('stop-btn')[0];
@@ -49,9 +49,12 @@ function Jukebox(songArray) {
 	var volUpBtn = document.getElementsByClassName('vol-up-btn')[0];
 	var volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
 	var muteBtn = document.getElementsByClassName('mute-btn')[0];
+
+	var urlInput = document.getElementsByClassName("url-input")[0];
+	var titleInput = document.getElementsByClassName("title-input")[0];
+	var artistInput = document.getElementsByClassName("artist-input")[0];
 	var addTrackBtn = document.getElementsByClassName('add-new-track-btn')[0];
-	var nowPlayingTitle = document.getElementsByClassName('now-playing__title')[0];
-	var nowPlayingArtist = document.getElementsByClassName('now-playing__artist')[0];
+	var clearFormBtn = document.getElementsByClassName('clear-new-input-btn')[0];
 
 	playBtn.addEventListener("click", play);	
 	pauseBtn.addEventListener("click", pause);
@@ -59,11 +62,12 @@ function Jukebox(songArray) {
 	nextBtn.addEventListener("click", nextTrack);
 	prevBtn.addEventListener("click", prevTrack);
 	randBtn.addEventListener("click", pickRandom);
-
 	muteBtn.addEventListener("click", muteUnmute);
 	volUpBtn.addEventListener("click", volumeUp);
 	volDownBtn.addEventListener("click", volumeDown);
+
 	addTrackBtn.addEventListener("click", newSongObjFrmInput);
+	clearFormBtn.addEventListener("click", clearNewTrackInput);
 
 	loadSong(currentSongIndex);
 	listSongs();
@@ -93,16 +97,15 @@ function Jukebox(songArray) {
 	}
 
 	function unmute() {
-		player.volume = this.prevVol;		
+		player.volume = prevVol;		
 		muteBtn.innerHTML = "Mute";
 	}
 
 	function mute() {
-		this.prevVol = player.volume;
+		prevVol = player.volume;
 		player.volume = 0;
 		muteBtn.innerHTML = "Unmute";	
 	}
-
 
 	function volumeUp() {
 		if (player.volume >= 0.95) {
@@ -123,17 +126,16 @@ function Jukebox(songArray) {
 	}
 
 	function newSongObjFrmInput() {
-		var urlInput = document.getElementsByClassName("url-input")[0];
-		var titleInput = document.getElementsByClassName("title-input")[0];
-		var artistInput = document.getElementsByClassName("artist-input")[0];
-
 		var url = urlInput.value;
 		var title = titleInput.value;
 		var artist = artistInput.value;
 		var newSong = new Song(url, title, artist);
 
 		addSong(newSong);
+		clearNewTrackInput();
+	}
 
+	function clearNewTrackInput() {
 		urlInput.value = "";
 		titleInput.value = "";
 		artistInput.value = "";
