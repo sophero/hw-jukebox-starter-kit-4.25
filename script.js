@@ -37,7 +37,6 @@ function Jukebox(songArray) {
 
 	var player = document.getElementById('audio-player');
 	var songList = document.getElementsByClassName('song-list')[0];
-	var addTrackModal = document.getElementsByClassName('add-track-modal__container')[0];
 	
 	var playBtn = document.getElementsByClassName('play-btn')[0];
 	var pauseBtn = document.getElementsByClassName('pause-btn')[0];
@@ -45,7 +44,6 @@ function Jukebox(songArray) {
 	var volUpBtn = document.getElementsByClassName('vol-up-btn')[0];
 	var volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
 	var muteBtn = document.getElementsByClassName('mute-btn')[0];
-	var openModalBtn = document.getElementsByClassName('open-modal-btn')[0];
 	var addTrackBtn = document.getElementsByClassName('add-new-track-btn')[0];
 
 	playBtn.addEventListener("click", this.play);	
@@ -54,7 +52,6 @@ function Jukebox(songArray) {
 	muteBtn.addEventListener("click", this.muteUnmute);
 	volUpBtn.addEventListener("click", this.volumeUp);
 	volDownBtn.addEventListener("click", this.volumeDown);
-	openModalBtn.addEventListener("click", openAddTrackModal);
 	addTrackBtn.addEventListener("click", newSongObjFrmInput);
 
 	loadSong(this.songs[this.currentSongIndex]);
@@ -128,7 +125,6 @@ function Jukebox(songArray) {
 		urlInput.value = "";
 		titleInput.value = "";
 		artistInput.value = "";
-		closeAddTrackModal();
 	}
 
 	function addSong(song) {
@@ -174,12 +170,4 @@ function Jukebox(songArray) {
 		jukeboxObj.currentSongIndex = songIndex;
 	}
 	
-	function openAddTrackModal() {
-		addTrackModal.style.display = "block";
-	}
-
-	function closeAddTrackModal() {
-		addTrackModal.style.display = "none";
-	}
-
 }

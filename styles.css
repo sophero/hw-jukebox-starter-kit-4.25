@@ -18,7 +18,3 @@ body {
 .add-track-modal__container {
 	display: none;
 }
-
-.open-modal-btn:hover {
-	cursor: pointer;
-}
