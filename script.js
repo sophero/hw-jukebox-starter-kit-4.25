@@ -1,8 +1,12 @@
 // To do:
-// addSong user interface to create Song object with artist and title, and most importantly url
+// now playing!
 // random song
 // next track, previous track
 // add currently playing info eg. volume, time through track..
+// add eventlistener on spacebar to play/pause!
+// time through track
+// need separate method for setting currentSongIndex
+// make separate method for clearing track new track input, add clear form button
 
 var initialSongs = [
 	new Song("audio-files/meshuggah-clockworks.mp3", "Clockworks", "Meshuggah"),
@@ -45,6 +49,8 @@ function Jukebox(songArray) {
 	var volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
 	var muteBtn = document.getElementsByClassName('mute-btn')[0];
 	var addTrackBtn = document.getElementsByClassName('add-new-track-btn')[0];
+	var nowPlayingTitle = document.getElementsByClassName('now-playing__title')[0];
+	var nowPlayingArtist = document.getElementsByClassName('now-playing__artist')[0];
 
 	playBtn.addEventListener("click", this.play);	
 	pauseBtn.addEventListener("click", this.pause);
@@ -65,6 +71,7 @@ function Jukebox(songArray) {
 
 	function play() {
 		player.play();
+		displayCurrentSong();
 	}
 
 	function stop() {
@@ -166,8 +173,13 @@ function Jukebox(songArray) {
 	function pickSong(songIndex) {
 		var song = jukeboxObj.songs[songIndex]
 		player.src = song.url;
-		jukeboxObj.play();
 		jukeboxObj.currentSongIndex = songIndex;
+		jukeboxObj.play();
+	}
+
+	function displayCurrentSong() {
+		nowPlayingTitle.innerHTML = jukeboxObj.songs[jukeboxObj.currentSongIndex].title;
+		nowPlayingArtist.innerHTML = jukeboxObj.songs[jukeboxObj.currentSongIndex].artist;
 	}
 	
 }

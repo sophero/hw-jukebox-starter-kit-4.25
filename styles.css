@@ -7,14 +7,48 @@ body {
 	font-size: 0.9em;
 }
 
+.now-playing__header {
+	font-size: 1em;
+}
+
+.now-playing {
+	text-align: center;
+	margin: 5px;
+}
+
+.now-playing__title {
+	font-size: 2em;
+}
+
+.now-playing__artist {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.ctrl-btns__container {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+.ctrl-btns {
+	padding: 10px;
+	font-weight: bold;
+}
+
 .ctrl-btns:hover {
 	cursor: pointer;
+}
+
+.song-list__header {
+	font-size: 1em;
 }
 
 .song-list__item:hover {
 	cursor: pointer;
 }
 
-.add-track-modal__container {
-	display: none;
+.add-track__header {
+	font-size: 1em;
+	font-weight: normal;
 }

@@ -7,18 +7,25 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<audio id="audio-player" controls type="audio/mp3"></audio>		
+	<audio id="audio-player" type="audio/mp3"></audio>			
 
-	<div class="ctrl-btns play-btn">Play</div>
-	<div class="ctrl-btns pause-btn">Pause</div>
-	<div class="ctrl-btns stop-btn">Stop</div>
-	<div class="ctrl-btns vol-up-btn">+</div>
-	<div class="ctrl-btns vol-down-btn">-</div>
-	<div class="ctrl-btns mute-btn">Mute</div>
+	<div class="ctrl-btns__container">
+		<div class="ctrl-btns play-btn">Play</div>
+		<div class="ctrl-btns pause-btn">Pause</div>
+		<div class="ctrl-btns stop-btn">Stop</div>
+		<div class="ctrl-btns vol-up-btn">+</div>
+		<div class="ctrl-btns vol-down-btn">-</div>
+		<div class="ctrl-btns mute-btn">Mute</div>
+	</div>
+
+	<h2 class="now-playing__header">Now playing:</h2>
+	<div class="now-playing now-playing__title"></div>
+	<div class="now-playing now-playing__artist"></div>
+
+	<h2 class="song-list__header">Songs:</h2>		
 	<ol class="song-list"></ol>
 
-	<div>Load new track:</div>
-
+	<h2 class="add-track__header">Load new track:</h2>
 	<div class="add-track-form__container">
 		<form>
 			<input type="text" class="input-box url-input" placeholder="Track URL">
