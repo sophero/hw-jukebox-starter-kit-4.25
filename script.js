@@ -1,5 +1,4 @@
 // To do:
-// now playing!
 // random song
 // next track, previous track
 // add currently playing info eg. volume, time through track..
@@ -7,6 +6,9 @@
 // time through track
 // need separate method for setting currentSongIndex
 // make separate method for clearing track new track input, add clear form button
+// loadSong should be called by pickSong. loadSong should be the last interface to call this.play()
+	// but pass it the desired song index, not object. smaller messages!
+
 
 var initialSongs = [
 	new Song("audio-files/meshuggah-clockworks.mp3", "Clockworks", "Meshuggah"),
@@ -25,7 +27,7 @@ function Song(url, title, artist) {
 
 function Jukebox(songArray) {
 	
-	this.currentSongIndex = 0;
+	var currentSongIndex = 0;
 	this.songs = songArray;
 	if (typeof this.songs !== "object") {
 		this.songs = [];
@@ -38,6 +40,8 @@ function Jukebox(songArray) {
 	this.muteUnmute = muteUnmute;
 	this.volumeUp = volumeUp;
 	this.volumeDown = volumeDown;
+	this.nextTrack = nextTrack;
+	this.prevTrack = prevTrack;
 
 	var player = document.getElementById('audio-player');
 	var songList = document.getElementsByClassName('song-list')[0];
@@ -45,6 +49,8 @@ function Jukebox(songArray) {
 	var playBtn = document.getElementsByClassName('play-btn')[0];
 	var pauseBtn = document.getElementsByClassName('pause-btn')[0];
 	var stopBtn = document.getElementsByClassName('stop-btn')[0];
+	var nextBtn = document.getElementsByClassName('next-btn')[0];
+	var prevBtn = document.getElementsByClassName('prev-btn')[0];
 	var volUpBtn = document.getElementsByClassName('vol-up-btn')[0];
 	var volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
 	var muteBtn = document.getElementsByClassName('mute-btn')[0];
@@ -52,15 +58,18 @@ function Jukebox(songArray) {
 	var nowPlayingTitle = document.getElementsByClassName('now-playing__title')[0];
 	var nowPlayingArtist = document.getElementsByClassName('now-playing__artist')[0];
 
-	playBtn.addEventListener("click", this.play);	
-	pauseBtn.addEventListener("click", this.pause);
-	stopBtn.addEventListener("click", this.stop);
-	muteBtn.addEventListener("click", this.muteUnmute);
-	volUpBtn.addEventListener("click", this.volumeUp);
-	volDownBtn.addEventListener("click", this.volumeDown);
+	playBtn.addEventListener("click", play);	
+	pauseBtn.addEventListener("click", pause);
+	stopBtn.addEventListener("click", stop);
+	nextBtn.addEventListener("click", nextTrack);
+	prevBtn.addEventListener("click", prevTrack);
+
+	muteBtn.addEventListener("click", muteUnmute);
+	volUpBtn.addEventListener("click", volumeUp);
+	volDownBtn.addEventListener("click", volumeDown);
 	addTrackBtn.addEventListener("click", newSongObjFrmInput);
 
-	loadSong(this.songs[this.currentSongIndex]);
+	loadSong(currentSongIndex);
 	listSongs();
 	addSongListEvents();
 
@@ -147,7 +156,7 @@ function Jukebox(songArray) {
 		var songListItems = document.getElementsByClassName("song-list__item");
 		for (let k = 0; k < songListItems.length; k++) {
 			songListItems[k].addEventListener("click", function() {
-				pickSong(k);
+				loadSong(k);
 			});
 		}
 	}
@@ -162,24 +171,35 @@ function Jukebox(songArray) {
 		}
 	}
 
-	function loadSong(song) {
-		if (typeof song !== "object") {
-			return;
-		} else {
-			player.src = song.url;		
-		}
-	}
-
-	function pickSong(songIndex) {
-		var song = jukeboxObj.songs[songIndex]
-		player.src = song.url;
-		jukeboxObj.currentSongIndex = songIndex;
+	function loadSong(songIndex) {
+		player.src = jukeboxObj.songs[songIndex].url;
+		currentSongIndex = songIndex;		
 		jukeboxObj.play();
 	}
-
+	
 	function displayCurrentSong() {
-		nowPlayingTitle.innerHTML = jukeboxObj.songs[jukeboxObj.currentSongIndex].title;
-		nowPlayingArtist.innerHTML = jukeboxObj.songs[jukeboxObj.currentSongIndex].artist;
+		nowPlayingTitle.innerHTML = jukeboxObj.songs[currentSongIndex].title;
+		nowPlayingArtist.innerHTML = jukeboxObj.songs[currentSongIndex].artist;
+	}
+
+	function nextTrack() {
+		var songArrayLen = jukeboxObj.songs.length;
+		if (currentSongIndex === songArrayLen - 1) {
+			currentSongIndex = 0;
+		} else {
+			currentSongIndex += 1;
+		}
+		loadSong(currentSongIndex);
+	}
+
+	function prevTrack() {
+		var songArrayLen = jukeboxObj.songs.length
+		if (currentSongIndex === 0) {
+			currentSongIndex = songArrayLen - 1;
+		} else {
+			currentSongIndex -= 1;
+		}
+		loadSong(currentSongIndex);
 	}
 	
 }
