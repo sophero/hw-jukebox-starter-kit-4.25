@@ -114,11 +114,20 @@ function Jukebox(songArray) {
 	}
 
 	function newSongObjFrmInput() {
-		var songUrl = document.getElementsByClassName("url-input")[0].value;
-		var title = document.getElementsByClassName("title-input")[0].value;
-		var artist = document.getElementsByClassName("artist-input")[0].value;
-		var newSong = new Song(songUrl, title, artist);
+		var urlInput = document.getElementsByClassName("url-input")[0];
+		var titleInput = document.getElementsByClassName("title-input")[0];
+		var artistInput = document.getElementsByClassName("artist-input")[0];
+
+		var url = urlInput.value;
+		var title = titleInput.value;
+		var artist = artistInput.value;
+		var newSong = new Song(url, title, artist);
+
 		addSong(newSong);
+
+		urlInput.value = "";
+		titleInput.value = "";
+		artistInput.value = "";
 		closeAddTrackModal();
 	}
 
