@@ -1,5 +1,4 @@
 // To do:
-// random song
 // add currently playing info eg. volume, time through track..
 // add eventlistener on spacebar to play/pause!
 // time through track
@@ -46,6 +45,7 @@ function Jukebox(songArray) {
 	var stopBtn = document.getElementsByClassName('stop-btn')[0];
 	var nextBtn = document.getElementsByClassName('next-btn')[0];
 	var prevBtn = document.getElementsByClassName('prev-btn')[0];
+	var randBtn = document.getElementsByClassName('rand-btn')[0];
 	var volUpBtn = document.getElementsByClassName('vol-up-btn')[0];
 	var volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
 	var muteBtn = document.getElementsByClassName('mute-btn')[0];
@@ -58,6 +58,7 @@ function Jukebox(songArray) {
 	stopBtn.addEventListener("click", stop);
 	nextBtn.addEventListener("click", nextTrack);
 	prevBtn.addEventListener("click", prevTrack);
+	randBtn.addEventListener("click", pickRandom);
 
 	muteBtn.addEventListener("click", muteUnmute);
 	volUpBtn.addEventListener("click", volumeUp);
@@ -195,6 +196,11 @@ function Jukebox(songArray) {
 			currentSongIndex -= 1;
 		}
 		loadSong(currentSongIndex);
+	}
+
+	function pickRandom() {
+		var randIndex = Math.floor(Math.random() * jukeboxObj.songs.length);
+		loadSong(randIndex);
 	}
 	
 }
