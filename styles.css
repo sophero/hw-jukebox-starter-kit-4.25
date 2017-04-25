@@ -2,6 +2,11 @@
 	box-sizing: border-box;
 }
 
+body {
+	font-family: Verdana;
+	font-size: 0.9em;
+}
+
 .ctrl-btns:hover {
 	cursor: pointer;
 }

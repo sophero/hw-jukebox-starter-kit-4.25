@@ -12,6 +12,7 @@ var initialSongs = [
 
 var jukebox = new Jukebox(initialSongs);
 
+
 function Song(url, title, artist) {
 	this.url = url;
 	this.title = title;
@@ -19,10 +20,21 @@ function Song(url, title, artist) {
 }
 
 function Jukebox(songArray) {
-
+	
+	this.currentSongIndex = 0;
+	this.songs = songArray;
+	if (typeof this.songs !== "object") {
+		this.songs = [];
+	}
 	var jukeboxObj = this;
 	var prevVol = 0.5;
-		
+	this.play = play;
+	this.pause = pause;
+	this.stop = stop;
+	this.muteUnmute = muteUnmute;
+	this.volumeUp = volumeUp;
+	this.volumeDown = volumeDown;
+
 	var player = document.getElementById('audio-player');
 	var songList = document.getElementsByClassName('song-list')[0];
 	var addTrackModal = document.getElementsByClassName('add-track-modal__container')[0];
@@ -34,22 +46,36 @@ function Jukebox(songArray) {
 	var volDownBtn = document.getElementsByClassName('vol-down-btn')[0];
 	var muteBtn = document.getElementsByClassName('mute-btn')[0];
 	var openModalBtn = document.getElementsByClassName('open-modal-btn')[0];
-	var addSongBtn = document.getElementsByClassName('add-new-song-btn')[0];
+	var addTrackBtn = document.getElementsByClassName('add-new-track-btn')[0];
 
-	this.pause = function() {
+	playBtn.addEventListener("click", this.play);	
+	pauseBtn.addEventListener("click", this.pause);
+	stopBtn.addEventListener("click", this.stop);
+	muteBtn.addEventListener("click", this.muteUnmute);
+	volUpBtn.addEventListener("click", this.volumeUp);
+	volDownBtn.addEventListener("click", this.volumeDown);
+	openModalBtn.addEventListener("click", openAddTrackModal);
+	addTrackBtn.addEventListener("click", newSongObjFrmInput);
+
+	loadSong(this.songs[this.currentSongIndex]);
+	listSongs();
+	addSongListEvents();
+
+
+	function pause() {
 		player.pause();
 	}
 
-	this.play = function() {
+	function play() {
 		player.play();
 	}
 
-	this.stop = function() {
+	function stop() {
 		player.pause();
 		player.currentTime = 0;
 	}
 
-	this.muteUnmute = function() {
+	function muteUnmute() {
 		if (player.volume === 0) {
 			unmute();
 		} else {
@@ -57,18 +83,19 @@ function Jukebox(songArray) {
 		}		
 	}
 
-	var unmute = function() {
+	function unmute() {
 		player.volume = prevVol;		
 		muteBtn.innerHTML = "Mute";
 	}
 
-	var mute = function() {
+	function mute() {
 		prevVol = player.volume;
 		player.volume = 0;
 		muteBtn.innerHTML = "Unmute";	
 	}
 
-	this.volumeUp = function() {
+
+	function volumeUp() {
 		if (player.volume >= 0.95) {
 			player.volume = 1;
 		} else {
@@ -77,7 +104,7 @@ function Jukebox(songArray) {
 		muteBtn.innerHTML = "Mute";
 	}
 
-	this.volumeDown = function() {
+	function volumeDown() {
 		if (player.volume <= 0.05) {
 			player.volume = 0;
 			muteBtn.innerHTML = "Unmute";
@@ -86,7 +113,7 @@ function Jukebox(songArray) {
 		}
 	}
 
-	newSongObjFrmInput = function() {
+	function newSongObjFrmInput() {
 		var songUrl = document.getElementsByClassName("url-input")[0].value;
 		var title = document.getElementsByClassName("title-input")[0].value;
 		var artist = document.getElementsByClassName("artist-input")[0].value;
@@ -94,7 +121,7 @@ function Jukebox(songArray) {
 		addSong(newSong);
 	}
 
-	var addSong = function(song) {
+	function addSong(song) {
 		if (typeof song !== "object") {
 			return;
 		}
@@ -103,7 +130,7 @@ function Jukebox(songArray) {
 		addSongListEvents();
 	}
 
-	var addSongListEvents = function() {
+	function addSongListEvents() {
 		var songListItems = document.getElementsByClassName("song-list__item");
 		for (let k = 0; k < songListItems.length; k++) {
 			songListItems[k].addEventListener("click", function() {
@@ -112,7 +139,7 @@ function Jukebox(songArray) {
 		}
 	}
 
-	var listSongs = function() {
+	function listSongs() {
 		songList.innerHTML = "";
 		for (var k = 0; k < jukeboxObj.songs.length; k++) {
 			var song = jukeboxObj.songs[k];
@@ -122,7 +149,7 @@ function Jukebox(songArray) {
 		}
 	}
 
-	var loadSong = function(song) {
+	function loadSong(song) {
 		if (typeof song !== "object") {
 			return;
 		} else {
@@ -130,60 +157,15 @@ function Jukebox(songArray) {
 		}
 	}
 
-	var pickSong = function(songIndex) {
+	function pickSong(songIndex) {
 		var song = jukeboxObj.songs[songIndex]
 		player.src = song.url;
 		jukeboxObj.play();
 		jukeboxObj.currentSongIndex = songIndex;
 	}
-
-	var toggleAddTrackModal = function() {
-		if (addTrackModal.style.display === "none") {
-			addTrackModal.style.display = "block";		
-		} else {
-			addTrackModal.style.display = "none";
-		}
-	}
 	
-	this.songs = songArray;
-	if (typeof this.songs !== "object") {
-		this.songs = [];
+	function openAddTrackModal() {
+		addTrackModal.style.display = "block";
 	}
 
-	this.currentSongIndex = 0;
-	loadSong(this.songs[this.currentSongIndex]);
-	listSongs();
-	addSongListEvents();
-
-	playBtn.addEventListener("click", this.play);	
-	pauseBtn.addEventListener("click", this.pause);
-	stopBtn.addEventListener("click", this.stop);
-	muteBtn.addEventListener("click", this.muteUnmute);
-	volUpBtn.addEventListener("click", this.volumeUp);
-	volDownBtn.addEventListener("click", this.volumeDown);
-	openModalBtn.addEventListener("click", toggleAddTrackModal);
-	addSongBtn.addEventListener("click", newSongObjFrmInput);
 }
-
-// Public methods
-// this.pause
-// this.play
-// this.addSong
-// this.muteUnmute
-// this.volumeUp
-// this.volumeDown
-
-// Public properties:
-// this.player
-// this.songs
-
-
-// Private methods
-// listSongs
-// loadSongs
-// mute
-// unmute
-
-// Private properties
-// playBtn
-// songList
