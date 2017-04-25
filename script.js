@@ -27,7 +27,7 @@ function Jukebox(songArray) {
 		this.songs = [];
 	}
 	var jukeboxObj = this;
-	var prevVol = 0.5;
+	this.prevVol = 0.5;
 	this.play = play;
 	this.pause = pause;
 	this.stop = stop;
@@ -84,12 +84,12 @@ function Jukebox(songArray) {
 	}
 
 	function unmute() {
-		player.volume = prevVol;		
+		player.volume = this.prevVol;		
 		muteBtn.innerHTML = "Mute";
 	}
 
 	function mute() {
-		prevVol = player.volume;
+		this.prevVol = player.volume;
 		player.volume = 0;
 		muteBtn.innerHTML = "Unmute";	
 	}
@@ -119,6 +119,7 @@ function Jukebox(songArray) {
 		var artist = document.getElementsByClassName("artist-input")[0].value;
 		var newSong = new Song(songUrl, title, artist);
 		addSong(newSong);
+		closeAddTrackModal();
 	}
 
 	function addSong(song) {
@@ -166,6 +167,10 @@ function Jukebox(songArray) {
 	
 	function openAddTrackModal() {
 		addTrackModal.style.display = "block";
+	}
+
+	function closeAddTrackModal() {
+		addTrackModal.style.display = "none";
 	}
 
 }
